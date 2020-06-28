@@ -1,2 +1,2 @@
 # my-leetcode
-by javascript and html
+code by javascript and html
