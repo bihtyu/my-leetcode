@@ -10,42 +10,28 @@ var numIslands = function(grid) {
    * DFS
    * 遍历到【1】时，重置为【0】，然后把这个元素的上下左右是【1】的也重置为【0】
   */
+ const rowLen = grid.length
+ const colLen = grid[0].length
   grid.map((item, rowIndex) => {
     item.map((subItem, columnIndex) => {
       if (subItem === '1') {
-        grid[rowIndex][columnIndex] = '0'
         total += 1 // 岛屿数量 +1
-        setAround(rowIndex, columnIndex, grid)
+        setAround(rowIndex, columnIndex, grid, rowLen, colLen)
       }
     })
   })
   return total
 }
 
-function setAround(rowIndex, columnIndex, originData) {
-  // top
-  const needSet = []
-  if (originData[rowIndex - 1] && originData[rowIndex - 1][columnIndex] === '1') {
-    needSet.push([rowIndex - 1, columnIndex])
+function setAround(rowIndex, columnIndex, grid, rowLen, colLen) {
+  if (rowIndex < 0 || columnIndex < 0 || rowIndex > rowLen - 1 || columnIndex > colLen - 1 || grid[rowIndex][columnIndex] === '0') { 
+    return false
   }
-  // right
-  if (originData[rowIndex][columnIndex + 1] === '1') {
-    needSet.push([rowIndex, columnIndex + 1])
-  }
-  // bottom
-  if (originData[rowIndex + 1] && originData[rowIndex + 1][columnIndex] === '1') {
-    needSet.push([rowIndex + 1, columnIndex])
-  }
-  // left
-  if (originData[rowIndex][columnIndex - 1] === '1') {
-    needSet.push([rowIndex, columnIndex - 1])
-  }
-  for (const item of needSet) {
-    if (item.every(item => item >= 0)) {
-      originData[item[0]][item[1]] = '0'
-      setAround(item[0], item[1], originData) // 递归重置
-    }
-  }
+  grid[rowIndex][columnIndex] = '0'
+  setAround(rowIndex - 1, columnIndex, grid, rowLen, colLen)
+  setAround(rowIndex, columnIndex + 1, grid, rowLen, colLen)
+  setAround(rowIndex + 1, columnIndex, grid, rowLen, colLen)
+  setAround(rowIndex, columnIndex - 1, grid, rowLen, colLen)
 }
 
 const data1 = [["0","1","0","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]
@@ -82,6 +68,6 @@ const data5 = [["1","1","1"],["0","1","0"],["1","1","1"]]
 // 111
 // 1
 
-console.log(numIslands(data5))
+console.log(numIslands(data4))
 
 </script>
