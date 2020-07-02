@@ -43,7 +43,7 @@ function setAround(rowIndex, columnIndex, originData) {
   for (const item of needSet) {
     if (item.every(item => item >= 0)) {
       originData[item[0]][item[1]] = '0'
-      setAround(item[0], item[1], originData)
+      setAround(item[0], item[1], originData) // 递归重置
     }
   }
 }
