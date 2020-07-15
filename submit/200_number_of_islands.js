@@ -1,8 +1,3 @@
-<!DOCTYPE html>
-<head></head>
-<body></body>
-
-<script>
 var numIslands = function(grid) {
   let total = 0
   if (grid.length === 0) { return total }
@@ -69,5 +64,3 @@ const data5 = [["1","1","1"],["0","1","0"],["1","1","1"]]
 // 1
 
 console.log(numIslands(data4))
-
-</script>
