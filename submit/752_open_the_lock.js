@@ -19,22 +19,22 @@ var openLock = function(deadends, target) {
   const targetArr = target.split('')
   let normalSteps = 0 // ignore deadends
   let stepArr = []
-  let currentArr = [0, 0, 0, 0]
+  let start = [0, 0, 0, 0]
   targetArr.map((item, index) => {
     const currentNum = Number(item)
     if (currentNum !== 0) {
       if (currentNum <= 5) {
         normalSteps += currentNum
         for (let i = 1; i <= currentNum; i++) {
-          currentArr[index] = i
-          const currentStr = currentArr.join('')
+          start[index] = i
+          const currentStr = start.join('')
           stepArr.push(currentStr)
         }
       } else {
         normalSteps += 10 - currentNum
         for (let i = 9; i >= currentNum; i--) {
-          currentArr[index] = i
-          const currentStr = currentArr.join('')
+          start[index] = i
+          const currentStr = start.join('')
           stepArr.push(currentStr)
         }
       }
