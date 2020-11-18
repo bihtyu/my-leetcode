@@ -15,35 +15,27 @@ var lengthOfLongestSubstring = function(s) {
   if (s.trim() === '' || s.length === 1) return 1
   const originArr = s.split('')
   let strArr = []
-  const allArr = []
+  let maxLen = 0
   for(let i = 0; i < originArr.length; i++) {
     const item = originArr[i]
     const currentIndex = strArr.findIndex(findItem => findItem === item)
     if (currentIndex < 0) {
       strArr.push(item)
       if (i === originArr.length - 1) {
-        allArr.push(strArr)
+        maxLen = strArr.length > maxLen ? strArr.length : maxLen
       }
     } else {
-      // abcabcbb
       const currentStart = i - strArr.length
       const newArr = originArr.slice(currentStart, originArr.length)
       const resetIndex = newArr.findIndex(findItem => findItem === item) + currentStart + 1
       i = resetIndex
-      allArr.push(strArr)
+      maxLen = strArr.length > maxLen ? strArr.length : maxLen
       strArr = [originArr[i]]
     }
-    if ((i === originArr.length - 1) && allArr.length === 0) {
-      allArr.push(strArr)
+    if (i === originArr.length - 1) {
+      maxLen = strArr.length > maxLen ? strArr.length : maxLen
     }
   }
-  console.log(allArr)
-  let maxLen = 0
-  allArr.forEach(item => {
-    if (item.length > maxLen) {
-      maxLen = item.length
-    }
-  })
   return maxLen
 };
 // lengthOfLongestSubstring("bpfbhmipx")
