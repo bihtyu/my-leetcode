@@ -20,20 +20,7 @@
  * @return {ListNode}
  */
 var addTwoNumbers = function(l1, l2) {
-  return setNumToList(getNum(l1) + getNum(l2))
-};
-
-function getNum(list) {
-  return list.split(' -> ').reverse().join('')
+  
 }
-
-function setNumToList(num) {
-  return num.split('').reverse().join(' -> ')
-}
-
-const l1 = '2 -> 4 -> 3'
-const l2 = '5 -> 6 -> 4'
-addTwoNumbers(l1, l2)
-
 // @lc code=end
 
