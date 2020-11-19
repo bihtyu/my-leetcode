@@ -10,45 +10,41 @@
  * @return {string}
  */
 var longestPalindrome = function(s) {
-  if (s.length === 1) return a
   const arr = s.split('')
-  if (Array.from(new Set(arr)).length === 1) return s
-  let strArr = []
-  const allArr = []
-  let start = 0
-  for(let i = 0; i < arr.length; i++) {
-    const item = arr[i]
-    const isNewOne = item !== strArr[0]
-    strArr.push(item)
-    if (isNewOne) {
-      if (strArr.length === 1) {
-        start = i
-      }
-    } else {
-      allArr.push(strArr)
-      i = start
-      strArr = []
-    }
-    if ((i === arr.length - 1) && (allArr.length === 0)) {
-      i = start
-      strArr = []
-    }
-    if ((start === arr.length - 1) && (allArr.length === 0)) {
-      allArr.push([arr[0]])
-    }
-  }
+  const point = {}
   let maxStrObj = {
     isPalindromeArr: false,
     arr: [],
     len: 0
   }
-  console.log(allArr)
-  allArr.forEach(item => {
-    const currentObj = isPalindrome(item)
-    if (currentObj.isPalindromeArr && currentObj.len > maxStrObj.len) {
+  const axisArr = []
+  const arrLen = arr.length
+  for (let i = 0; i < arrLen; i++) {
+    const item = arr[i]
+    point[item] = point[item] || []
+    if (point[item].length > 0) {
+      point[item].forEach(pointItem => {
+        axisArr.push([pointItem, i])
+      })
+    } else {
+      axisArr.push([i, null])
+    }
+    point[item].push(i)
+  }
+  for (let i = 0; i < axisArr.length; i++) {
+    const item = axisArr[i]
+    if (maxStrObj.len === arr.length) {
+      break
+    }
+    if ((item[0] + item[1] + 1) < maxStrObj.len) {
+      continue
+    }
+    let currentArr = item.length === 1 ? arr[item] : arr.slice(item[0], item[1] + 1)
+    const currentObj = isPalindrome(currentArr)
+    if (currentObj.isPalindromeArr && (currentObj.len > maxStrObj.len)) {
       maxStrObj = currentObj
     }
-  })
+  }
   console.log(maxStrObj.arr.join(''))
   return maxStrObj.arr.join('')
 };
@@ -56,15 +52,14 @@ var longestPalindrome = function(s) {
 function isPalindrome(arr) {
   let isPalindromeArr = true
   const len = arr.length
-  if (len === 2) {
-    if (arr[0] !== arr[1]) {
-      isPalindromeArr = false
-    }
-  } else {
-    for(let i = 0; i < len / 2; i++) {
-      if (isPalindromeArr && (arr[i] !== arr[len - i - 1])) {
+  for(let i = 0; i < len / 2; i++) {
+    if (isPalindromeArr) {
+      if (arr[i] !== arr[len - i - 1]) {
         isPalindromeArr = false
+        break
       }
+    } else {
+      break
     }
   }
   return {
@@ -77,7 +72,12 @@ function isPalindrome(arr) {
 // @lc code=end
 
 // longestPalindrome('ccc')
-longestPalindrome('xaabacxcabaaxcabaax') // error 
+// longestPalindrome('xaabacxcabaaxcabaax') // error
 // longestPalindrome('ac')
 // longestPalindrome('abcdefghioihgfedcba')
 // longestPalindrome('aba')
+// longestPalindrome('yfikrcvmuegdciuqahlsjesplljlswxaejgdzhubzqkiroxyhtjvazcwcnsvdzjiainmiyobyfclyugttaswlntwukkfbebcdaxdpaxwqenkxxphxdcgrnpruoaetvunwyskswvvmjmltncsdukwzlpfodhgxkjvzppwpvmqlfbojgbdiryleskemhjfoxxzjqihcykpgzhaugwwbqtddjzpmrgdncgzsttqenmbnnavfjkiennwxtguywoaiuungqpyfcffzmljfianapawiayywuvazrnxouvndzqbmmyntkkdyykgodjbeojtpnsyhfrltuazgznddaaibupephvgrcjpzvjttmhtnydwvrpgijselaukwrcosxpcbptebalkheymuyblffahvbszotmutmmqhlgoskuoejvavlprvgyozpylsnqhqrnqpabgbwzwxyibpmsauxcfnbtwwbosksuzqzmobijytxxtyjibomzqzusksobwwtbnfcxuasmpbiyxwzwbgbapqnrqhqnslypzoygvrplvavjeouksoglhqmmtumtozsbvhafflbyumyehklabetpbcpxsocrwkualesjigprvwdynthmttjvzpjcrgvhpepubiaaddnzgzautlrfhysnptjoebjdogkyydkktnymmbqzdnvuoxnrzavuwyyaiwapanaifjlmzffcfypqgnuuiaowyugtxwnneikjfvannbmneqttszgcndgrmpzjddtqbwwguahzgpkychiqjzxxofjhmekselyridbgjobflqmvpwppzvjkxghdofplzwkudscntlmjmvvwsksywnuvteaourpnrgcdxhpxxkneqwxapdxadcbebfkkuwtnlwsattguylcfyboyimniaijzdvsncwczavjthyxorikqzbuhzdgjeaxwsljllpsejslhaquicdgeumvcrkify')
+// longestPalindrome('bbbbbbb')
+// longestPalindrome('aaccdefcaa')
+// longestPalindrome('aa')
+longestPalindrome('racecar')
