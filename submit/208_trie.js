@@ -26,7 +26,10 @@ Trie.prototype.insert = function(word) {
     if (!tree[index + 1] || tree[index + 1].length === 0) {
       tree[index + 1] = []
     }
-    tree[index + 1].push({ val: item, par: currentPar, isEnd: index === wordLen - 1 })
+    const existItem = tree[index + 1].find(findItem => findItem.val === item)
+    if (!existItem || (existItem && existItem.par !== wordArr[index - 1 === -1 ? 0 : index - 1])) {
+      tree[index + 1].push({ val: item, par: currentPar, isEnd: index === wordLen - 1 })
+    }
     currentPar = item
   })
 };
@@ -56,18 +59,33 @@ Trie.prototype.startsWith = function(prefix, isSearch = false) {
       const matchItem = tree[index + 1].find(findItem => findItem.val === item && (findItem.par === '' || findItem.par === wordArr[index - 1]))
       isExist = Boolean(matchItem)
     }
-    if (isExist && index === wordLen - 1) {
+    if (isExist) {
       let currentItem = {}
       if (isSearch) {
-        currentItem = tree[index + 1] && tree[index + 1].find(findItem => findItem.val === item && findItem.isEnd)
+        if (index === 0) {
+          currentItem = tree[index + 1] && tree[index + 1].find(findItem => findItem.val === item)
+        } else {
+          currentItem = tree[index + 1] && tree[index + 1].find(findItem => findItem.val === item && (findItem.par === '' || findItem.par === wordArr[index - 1]))
+        }
+        if (prefix === 'sphaerolitic') {
+          console.log(index)
+          console.log(currentItem)
+        }
       } else {
         currentItem = tree[index + 1] && tree[index + 1].find(findItem => {
           return findItem.val === item && (findItem.par === '' || findItem.par === wordArr[index - 1])
         })
       }
-      isExist = Boolean(currentItem)
+      if (index === wordLen - 1 && index !== 0) {
+        isExist = Boolean(currentItem) && currentItem.isEnd
+      } else {
+        isExist = Boolean(currentItem)
+      }
     }
   })
+  if (prefix === 'sphaerolitic') {
+    console.log(isExist)
+  }
   return isExist
 };
 
@@ -81,23 +99,15 @@ Trie.prototype.startsWith = function(prefix, isSearch = false) {
 
 const trie = new Trie();
 
-// trie.insert("apple");
-// trie.insert("appladsflksdjfksd");
-// trie.startsWith("appleds");
+const operateArr = ["insert","insert","search","search","search","insert","search","insert","insert","insert","insert","search","search","search","search","search","search","insert","search","search","insert","search","search","insert","search","insert","insert","insert","search","insert","search","insert","search","insert","search","insert","insert","search","search","search","search","insert","insert","insert","insert","search","insert","search","insert","insert","search","insert","insert","search","search","insert","search","insert","search","insert","insert","search","search","search","insert","search","search","search","search","search","insert","insert","insert","search","search","insert","search","search","insert","insert","search","search","insert","search","insert","search","insert","search","search","search","insert","search","insert","search","search","search","search","search","insert","insert","search","search","search","search","search","insert","insert","insert","search","insert","insert","search","insert","search","search","search","search","search","search","search","search","search","insert","insert","insert","insert","insert","insert","search","insert","insert","insert","search","search","insert","insert","search","search","search","insert","search","search","insert","insert","insert","insert","insert","insert","insert","insert","insert","search","search","search","insert","insert","insert","search","search","search","insert","search","insert","search","search","insert","search","insert","search","insert","insert","search","insert","insert","insert","insert","insert","insert","insert","search","search","insert","search","search","search","search","insert","insert","insert","insert","insert","search","insert","insert","search","search","search","insert","insert","insert","search","insert","search","search","search","search","insert","search","search","search","insert","search","insert","insert","search","search","insert","insert","search","search","search","search","search","search","search","insert","insert","search","insert","search","insert","search","search","insert","search","search","search","insert","search","insert","insert","search","insert","insert","search","insert","insert","search","insert","search","search","search","insert","search","search","insert","insert","insert","insert","insert","insert","insert","insert","insert","insert","search","search","insert","search","insert","insert","search","search","insert","search","insert","search","search","insert","insert","search","insert","search","insert","search","insert","search","insert","search","search","search","insert","insert","search","insert","insert","search","search","insert","insert","search","search","search","search","search","insert","search","insert","search","insert","search","search","search","insert","search","insert","search","search","search","search","insert","search","search","insert","insert","search","search","insert","insert","search","search","search","search","search","search","search","insert","insert","search","search","insert","insert","search","search","insert","insert","insert","search","insert","insert","insert","search","search","insert","insert","insert","search","search","search","insert","search","search","insert","insert","search","search","insert","insert","insert","insert","search","insert","insert","insert","search","insert","search","search","search"]
 
-// trie.insert("app");
-// trie.insert("apple");
-// trie.insert("beer");
-// trie.insert("add");
-// trie.insert("jam");
-// trie.insert("rental");
-// trie.startsWith("rent");
+const dataArr = [["nemathelminth"],["entracte"],["nemathelminth"],["entracte"],["spittlestaff"],["spittlestaff"],["hematocrit"],["hematocrit"],["inachid"],["phthalan"],["mev"],["inachid"],["phthalan"],["mev"],["hematoid"],["kingmaking"],["brent"],["hematoid"],["epollicate"],["allegiant"],["kingmaking"],["zomotherapeutic"],["disinvolve"],["brent"],["prefashion"],["epollicate"],["allegiant"],["zomotherapeutic"],["vangeli"],["disinvolve"],["pucklike"],["prefashion"],["lysidine"],["vangeli"],["stingily"],["pucklike"],["lysidine"],["morong"],["counterclockwise"],["deemstership"],["turban"],["stingily"],["morong"],["counterclockwise"],["deemstership"],["impermeableness"],["turban"],["inattentively"],["impermeableness"],["inattentively"],["bonewort"],["bonewort"],["zincographer"],["zincographer"],["ultrasubtle"],["ultrasubtle"],["facingly"],["facingly"],["forchase"],["forchase"],["featherwing"],["featherwing"],["production"],["misesteem"],["production"],["chrysoaristocracy"],["nidorosity"],["shurf"],["gauche"],["crocidura"],["misesteem"],["chrysoaristocracy"],["nidorosity"],["spooning"],["orc"],["shurf"],["nonwestern"],["grus"],["gauche"],["crocidura"],["megaerg"],["jesus"],["spooning"],["subconformable"],["orc"],["bimonthly"],["nonwestern"],["frotton"],["interspinalis"],["kahau"],["grus"],["cosaque"],["megaerg"],["perilenticular"],["silenales"],["soapweed"],["concussion"],["stackage"],["jesus"],["subconformable"],["prehistorically"],["roomlet"],["unblissful"],["unestablish"],["vilipender"],["bimonthly"],["frotton"],["interspinalis"],["intramammary"],["kahau"],["cosaque"],["hispanidad"],["perilenticular"],["hemophilia"],["vitreously"],["taenite"],["kenogenesis"],["pyroelectric"],["whup"],["topmost"],["nigritude"],["consubstantiality"],["silenales"],["soapweed"],["concussion"],["stackage"],["prehistorically"],["roomlet"],["testor"],["unblissful"],["unestablish"],["vilipender"],["simonious"],["reactance"],["intramammary"],["hispanidad"],["colocentesis"],["infiltrate"],["maxima"],["hemophilia"],["expatiator"],["redbird"],["vitreously"],["taenite"],["kenogenesis"],["pyroelectric"],["whup"],["topmost"],["nigritude"],["consubstantiality"],["testor"],["apperceptive"],["groundliness"],["oneirocritical"],["simonious"],["reactance"],["colocentesis"],["splanchnic"],["cabinetworker"],["resinolic"],["infiltrate"],["tashnakist"],["maxima"],["betrunk"],["floretum"],["expatiator"],["melenic"],["redbird"],["phallales"],["apperceptive"],["groundliness"],["opisthocoelous"],["oneirocritical"],["splanchnic"],["cabinetworker"],["resinolic"],["tashnakist"],["betrunk"],["floretum"],["hyperdiastole"],["aminobenzoic"],["melenic"],["wormlike"],["schuhe"],["brahmahood"],["gutter"],["phallales"],["opisthocoelous"],["hyperdiastole"],["aminobenzoic"],["wormlike"],["interlace"],["schuhe"],["brahmahood"],["sounder"],["hyperactivity"],["crosse"],["gutter"],["interlace"],["sounder"],["demineralization"],["hyperactivity"],["sulfotelluride"],["polyparous"],["bifidated"],["sirene"],["crosse"],["inconfutable"],["cossette"],["protocanonical"],["demineralization"],["thanksgiving"],["sulfotelluride"],["polyparous"],["parisonic"],["holer"],["bifidated"],["sirene"],["tarepatch"],["promycelial"],["impone"],["metasomal"],["toweling"],["promissorily"],["intralaryngeally"],["inconfutable"],["cossette"],["redocket"],["protocanonical"],["terceron"],["thanksgiving"],["orthodome"],["pament"],["parisonic"],["agnathic"],["stageability"],["migratory"],["holer"],["sukiyaki"],["tarepatch"],["promycelial"],["synaloepha"],["impone"],["metasomal"],["tranquilize"],["toweling"],["promissorily"],["obsoletism"],["intralaryngeally"],["zecchini"],["umbone"],["uniridescent"],["redocket"],["pseudosiphuncal"],["pyelonephritic"],["terceron"],["orthodome"],["pament"],["agnathic"],["stageability"],["migratory"],["sukiyaki"],["synaloepha"],["tranquilize"],["obsoletism"],["miticidal"],["overmodesty"],["zecchini"],["dye"],["umbone"],["uniridescent"],["keraterpeton"],["intracosmical"],["pseudosiphuncal"],["snakily"],["pyelonephritic"],["elvis"],["nenuphar"],["miticidal"],["overmodesty"],["quaintness"],["dye"],["epileptoid"],["keraterpeton"],["subsultus"],["intracosmical"],["pseudophilosophical"],["snakily"],["lymph"],["alkahest"],["slimer"],["elvis"],["nenuphar"],["blackguardize"],["quaintness"],["epileptoid"],["echinodorus"],["peronosporaceous"],["subsultus"],["pseudophilosophical"],["dittogram"],["infatuatedly"],["lampyris"],["antitragus"],["hidden"],["lymph"],["sulphoarsenic"],["alkahest"],["arpeggiated"],["slimer"],["unvented"],["tribracteolate"],["vehemency"],["blackguardize"],["plunger"],["echinodorus"],["bacach"],["peasantlike"],["chrysarobin"],["capful"],["peronosporaceous"],["gymnothorax"],["photochemistry"],["dittogram"],["infatuatedly"],["palmatifid"],["rhodope"],["lampyris"],["antitragus"],["statuelike"],["arterialization"],["sunglo"],["throu"],["unirhyme"],["accompanist"],["hylarchic"],["hidden"],["sulphoarsenic"],["allicient"],["ophiurid"],["arpeggiated"],["unvented"],["floodboard"],["pistachio"],["tribracteolate"],["vehemency"],["plunger"],["eponym"],["bacach"],["peasantlike"],["chrysarobin"],["formidableness"],["approve"],["capful"],["gymnothorax"],["photochemistry"],["skiptail"],["consonate"],["germanesque"],["palmatifid"],["transcending"],["scorn"],["rhodope"],["statuelike"],["incarn"],["receivedness"],["arterialization"],["sunglo"],["throu"],["unirhyme"],["surviving"],["accompanist"],["hylarchic"],["allicient"],["quinaldinium"],["ophiurid"],["alumish"],["sphaerolitic"],["uneulogized"]]
 
-// error
-// [null,null,null,null,null,null,null,false,true,false,false,false,false,false,true,true,false,true,true,false,false,false,false,true,true]
 
-// right
-// [null,null,null,null,null,null,null,false,true,false,false,false,false,false,true,true,false,true,true,false,false,false,true,true,true]
+for (let i = 0; i < operateArr.length; i++) {
+  trie[operateArr[i]](dataArr[i][0])
+}
+
+console.log(trie.tree[12])
 
 // @lc code=end
-
