@@ -26,15 +26,8 @@ Trie.prototype.insert = function(word) {
     if (!tree[index + 1] || tree[index + 1].length === 0) {
       tree[index + 1] = []
     }
-    if (tree[index + 1].length > 0 && tree[index + 1].find(findItem => findItem.val === item)) {
-      if (index === wordLen - 1) {
-        tree[index + 1].push({ val: item, par: currentPar, isEnd: true })
-      }
-      currentPar = item
-    } else {
-      currentPar = index === 0 ? '' : wordArr[index - 1]
-      tree[index + 1].push({ val: item, par: currentPar, isEnd: index === wordLen - 1 })
-    }
+    tree[index + 1].push({ val: item, par: currentPar, isEnd: index === wordLen - 1 })
+    currentPar = item
   })
 };
 
@@ -59,15 +52,18 @@ Trie.prototype.startsWith = function(prefix, isSearch = false) {
   const wordLen = wordArr.length
   let isExist = true
   wordArr.forEach((item, index) => {
-    if (isExist && tree[index + 1].findIndex(findItem => findItem.val === item) < 0) {
-      isExist = false
+    if (isExist && tree[index + 1]) {
+      const matchItem = tree[index + 1].find(findItem => findItem.val === item && (findItem.par === '' || findItem.par === wordArr[index - 1]))
+      isExist = Boolean(matchItem)
     }
     if (isExist && index === wordLen - 1) {
       let currentItem = {}
       if (isSearch) {
-        currentItem = tree[index + 1].find(findItem => findItem.val === item && findItem.isEnd)
+        currentItem = tree[index + 1] && tree[index + 1].find(findItem => findItem.val === item && findItem.isEnd)
       } else {
-        currentItem = tree[index + 1].find(findItem => findItem.val === item)
+        currentItem = tree[index + 1] && tree[index + 1].find(findItem => {
+          return findItem.val === item && (findItem.par === '' || findItem.par === wordArr[index - 1])
+        })
       }
       isExist = Boolean(currentItem)
     }
@@ -85,13 +81,23 @@ Trie.prototype.startsWith = function(prefix, isSearch = false) {
 
 const trie = new Trie();
 
-trie.insert("apple");
-console.log(trie.startsWith("app"))
-console.log(trie.search("app"))
-// trie.search("apple");   // 返回 true
-// trie.search("app");     // 返回 false
-// trie.startsWith("app"); // 返回 true
-// trie.insert("app");   
-// trie.search("app");     // 返回 true
+// trie.insert("apple");
+// trie.insert("appladsflksdjfksd");
+// trie.startsWith("appleds");
+
+// trie.insert("app");
+// trie.insert("apple");
+// trie.insert("beer");
+// trie.insert("add");
+// trie.insert("jam");
+// trie.insert("rental");
+// trie.startsWith("rent");
+
+// error
+// [null,null,null,null,null,null,null,false,true,false,false,false,false,false,true,true,false,true,true,false,false,false,false,true,true]
+
+// right
+// [null,null,null,null,null,null,null,false,true,false,false,false,false,false,true,true,false,true,true,false,false,false,true,true,true]
+
 // @lc code=end
 
